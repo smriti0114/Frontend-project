@@ -53,7 +53,7 @@ Since this is a static web project, no backend installation is required.
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/your-username/frontend-project.git](https://github.com/your-username/frontend-project.git)
+    git clone [https://github.com/smriti0114/frontend-project.git](https://github.com/smriti0114/frontend-project.git)
     ```
 
 2.  **Navigate to the project directory**
