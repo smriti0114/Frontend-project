@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - Textorr.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="qr.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>QR Generator</h1>
+            <p>Create beautiful QR codes instantly</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="qrtext" 
+                    placeholder="Enter text or URL..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="size-options">
+                <div class="size-option active" data-size="200">Small</div>
+                <div class="size-option" data-size="300">Medium</div>
+                <div class="size-option" data-size="400">Large</div>
+            </div>
+
+            <button class="btn btn-primary" id="generateBtn" onclick="generateQR()">
+                Generate QR Code
+            </button>
+        </div>
+
+        <div class="qr-display" id="qrDisplay">
+            <div class="qr-wrapper">
+                <img src="" id="qrimage" alt="QR Code">
+            </div>
+        </div>
+
+        <div class="action-buttons" id="actionButtons">
+            <button class="btn btn-secondary" onclick="downloadQR()">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Download
+            </button>
+            <button class="btn btn-secondary" onclick="copyQRLink()">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                Copy Link
+            </button>
+        </div>
+
+        <a href="home.html" class="back-link">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Home
+        </a>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Elements
+        const qrtext = document.getElementById('qrtext');
+        const qrimage = document.getElementById('qrimage');
+        const qrDisplay = document.getElementById('qrDisplay');
+        const actionButtons = document.getElementById('actionButtons');
+        const generateBtn = document.getElementById('generateBtn');
+        const tooltip = document.getElementById('tooltip');
+        const sizeOptions = document.querySelectorAll('.size-option');
+
+        // State
+        let selectedSize = 200;
+        let currentQRUrl = '';
+
+        // Size selection
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                sizeOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                selectedSize = option.dataset.size;
+                
+                // Regenerate if QR code exists
+                if (qrDisplay.classList.contains('show')) {
+                    generateQR(true);
+                }
+            });
+        });
+
+        // Generate QR Code
+        function generateQR(silent = false) {
+            const text = qrtext.value.trim();
+
+            // Validation
+            if (!text) {
+                qrtext.classList.add('error');
+                showTooltip('Please enter text or URL', 'error');
+                setTimeout(() => qrtext.classList.remove('error'), 400);
+                return;
+            }
+
+            // Loading state
+            if (!silent) {
+                generateBtn.classList.add('loading');
+                generateBtn.textContent = '';
+            }
+
+            // Generate QR code
+            setTimeout(() => {
+                currentQRUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${selectedSize}x${selectedSize}&data=${encodeURIComponent(text)}`;
+                qrimage.src = currentQRUrl;
+
+                // Show QR code with animation
+                qrDisplay.classList.add('show');
+                actionButtons.classList.add('show');
+
+                // Reset button
+                if (!silent) {
+                    generateBtn.classList.remove('loading');
+                    generateBtn.textContent = 'Generate QR Code';
+                    showTooltip('QR Code generated!', 'success');
+                }
+            }, silent ? 0 : 800);
+        }
+
+        // Download QR Code
+        async function downloadQR() {
+            if (!qrimage.src || qrimage.src === window.location.href) {
+                showTooltip('Please generate a QR code first', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(qrimage.src);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `qrcode-${Date.now()}.png`;
+                link.click();
+                URL.revokeObjectURL(url);
+                showTooltip('QR Code downloaded!', 'success');
+            } catch (error) {
+                showTooltip('Download failed. Please try again.', 'error');
+            }
+        }
+
+        // Copy QR Link
+        function copyQRLink() {
+            if (!currentQRUrl) {
+                showTooltip('Please generate a QR code first', 'error');
+                return;
+            }
+
+            navigator.clipboard.writeText(currentQRUrl).then(() => {
+                showTooltip('Link copied to clipboard!', 'success');
+            }).catch(() => {
+                showTooltip('Failed to copy link', 'error');
+            });
+        }
+
+        // Show Tooltip
+        function showTooltip(message, type = 'success') {
+            tooltip.textContent = message;
+            tooltip.style.background = type === 'success' ? '#10b981' : '#ef4444';
+            tooltip.style.left = '50%';
+            tooltip.style.bottom = '30px';
+            tooltip.style.transform = 'translateX(-50%)';
+            tooltip.classList.add('show');
+
+            setTimeout(() => {
+                tooltip.classList.remove('show');
+            }, 3000);
+        }
+
+        // Enter key support
+        qrtext.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                generateQR();
+            }
+        });
+
+        // Clear error state on input
+        qrtext.addEventListener('input', () => {
+            qrtext.classList.remove('error');
+        });
+
+        // Focus input on load
+        window.addEventListener('load', () => {
+            qrtext.focus();
+        });
+    </script>
+</body>
+</html>

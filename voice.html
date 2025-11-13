@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Generator - Textorr.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="voice.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>
+                <svg class="mic-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                </svg>
+                Voice Generator
+            </h1>
+            <p>Transform text into natural speech</p>
+        </div>
+
+        <div class="voice-settings">
+            <div class="setting-group">
+                <label>Language</label>
+                <select id="language">
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="fr-FR">French</option>
+                    <option value="de-DE">German</option>
+                    <option value="it-IT">Italian</option>
+                    <option value="pt-BR">Portuguese</option>
+                    <option value="ja-JP">Japanese</option>
+                    <option value="ko-KR">Korean</option>
+                    <option value="zh-CN">Chinese</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Speed</label>
+                <select id="speed">
+                    <option value="0.75">Slow</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="1.25">Fast</option>
+                    <option value="1.5">Very Fast</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="textarea-wrapper">
+            <textarea 
+                id="text-input" 
+                placeholder="Type or paste your text here... (max 5000 characters)"
+                maxlength="5000"
+            ></textarea>
+            <div class="char-count">
+                <span id="char-count">0</span> / 5000
+            </div>
+        </div>
+
+        <button class="btn-generate" id="generateBtn">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+            </svg>
+            <span class="btn-text">Generate Voice</span>
+            <div class="loader"></div>
+        </button>
+
+        <div class="audio-section" id="audioSection">
+            <div class="visualizer-container">
+                <div class="visualizer" id="visualizer"></div>
+                
+                <div class="custom-player">
+                    <div class="player-time">
+                        <span id="currentTime">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="audio-controls">
+                <button class="control-btn" id="playBtn">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    Play
+                </button>
+                <button class="control-btn" id="pauseBtn" style="display:none;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                    </svg>
+                    Pause
+                </button>
+                <button class="control-btn" id="downloadBtn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download
+                </button>
+            </div>
+        </div>
+
+        <a href="home.html" class="back-link">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Home
+        </a>
+    </div>
+
+    <audio id="audio-player" style="display: none;"></audio>
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Elements
+        const textInput = document.getElementById('text-input');
+        const charCount = document.getElementById('char-count');
+        const generateBtn = document.getElementById('generateBtn');
+        const audioSection = document.getElementById('audioSection');
+        const audioPlayer = document.getElementById('audio-player');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const visualizer = document.getElementById('visualizer');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const tooltip = document.getElementById('tooltip');
+        const languageSelect = document.getElementById('language');
+        const speedSelect = document.getElementById('speed');
+
+        let audioUrl = null;
+        let isPlaying = false;
+
+        // Character counter
+        textInput.addEventListener('input', () => {
+            charCount.textContent = textInput.value.length;
+            textInput.classList.remove('error');
+        });
+
+        // Create visualizer bars
+        function createVisualizer() {
+            visualizer.innerHTML = '';
+            for (let i = 0; i < 40; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = '20px';
+                visualizer.appendChild(bar);
+            }
+        }
+        createVisualizer();
+
+        // Animate visualizer
+        function animateVisualizer() {
+            const bars = visualizer.querySelectorAll('.bar');
+            bars.forEach((bar, index) => {
+                const height = Math.random() * 80 + 20;
+                bar.style.height = height + 'px';
+                bar.style.animationDelay = (index * 0.05) + 's';
+            });
+        }
+
+        // Generate Speech
+        async function generateSpeech() {
+            const text = textInput.value.trim();
+
+            if (!text) {
+                textInput.classList.add('error');
+                showTooltip('Please enter some text to convert', 'error');
+                return;
+            }
+
+            generateBtn.classList.add('loading');
+
+            try {
+                // Use browser's SpeechSynthesis API for instant playback
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = languageSelect.value;
+                utterance.rate = parseFloat(speedSelect.value);
+                window.speechSynthesis.speak(utterance);
+
+                // Generate downloadable audio using VoiceRSS API
+                const response = await fetch('https://api.voicerss.org/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        key: 'c22920a7fd514db2bb4c28bc43085d93',
+                        src: text,
+                        hl: languageSelect.value,
+                        r: speedSelect.value === '1' ? '0' : speedSelect.value === '0.75' ? '-5' : '5',
+                        c: 'mp3',
+                        f: '44khz_16bit_stereo',
+                    }),
+                });
+
+                if (!response.ok) throw new Error('Failed to generate audio');
+
+                const audioBlob = await response.blob();
+                audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayer.src = audioUrl;
+
+                audioSection.classList.add('show');
+                generateBtn.classList.remove('loading');
+                showTooltip('Voice generated successfully!', 'success');
+
+            } catch (error) {
+                generateBtn.classList.remove('loading');
+                showTooltip('Failed to generate voice. Please try again.', 'error');
+            }
+        }
+
+        // Play/Pause Controls
+        playBtn.addEventListener('click', () => {
+            audioPlayer.play();
+            isPlaying = true;
+            playBtn.style.display = 'none';
+            pauseBtn.style.display = 'flex';
+            startVisualizerAnimation();
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            audioPlayer.pause();
+            isPlaying = false;
+            pauseBtn.style.display = 'none';
+            playBtn.style.display = 'flex';
+            stopVisualizerAnimation();
+        });
+
+        // Visualizer Animation
+        let visualizerInterval;
+        function startVisualizerAnimation() {
+            visualizerInterval = setInterval(animateVisualizer, 100);
+        }
+
+        function stopVisualizerAnimation() {
+            clearInterval(visualizerInterval);
+            const bars = visualizer.querySelectorAll('.bar');
+            bars.forEach(bar => bar.style.height = '20px');
+        }
+
+        // Audio ended
+        audioPlayer.addEventListener('ended', () => {
+            isPlaying = false;
+            pauseBtn.style.display = 'none';
+            playBtn.style.display = 'flex';
+            stopVisualizerAnimation();
+        });
+
+        // Progress bar
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressFill.style.width = progress + '%';
+            currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+        });
+
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audioPlayer.duration);
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audioPlayer.currentTime = percent * audioPlayer.duration;
+        });
+
+        // Download
+        downloadBtn.addEventListener('click', () => {
+            if (!audioUrl) {
+                showTooltip('Please generate audio first', 'error');
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = audioUrl;
+            a.download = `voice-${Date.now()}.mp3`;
+            a.click();
+            showTooltip('Audio downloaded!', 'success');
+        });
+
+        // Utility Functions
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function showTooltip(message, type = 'success') {
+            tooltip.textContent = message;
+            tooltip.style.background = type === 'success' ? '#10b981' : '#ef4444';
+            tooltip.style.left = '50%';
+            tooltip.style.bottom = '30px';
+            tooltip.style.transform = 'translateX(-50%)';
+            tooltip.classList.add('show');
+            setTimeout(() => tooltip.classList.remove('show'), 3000);
+        }
+
+        // Generate button click
+        generateBtn.addEventListener('click', generateSpeech);
+
+        // Enter key support
+        textInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                generateSpeech();
+            }
+        });
+
+        // Focus input on load
+        window.addEventListener('load', () => textInput.focus());
+    </script>
+</body>
+</html>
