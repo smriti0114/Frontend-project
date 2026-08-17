@@ -222,27 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Floating labels creation
-    document.querySelectorAll('.input-wrapper input').forEach(input => {
-        // Prevent creating duplicate labels if already rendered
-        if (input.parentElement.querySelector('.floating-label')) return;
 
-        const label = document.createElement('label');
-        label.className = 'floating-label';
-        
-        if (input.id.includes('Email')) {
-            label.textContent = 'Email Address';
-        } else if (input.id.includes('ConfirmPassword')) {
-            label.textContent = 'Confirm Password';
-        } else if (input.id.includes('Password')) {
-            label.textContent = 'Password';
-        } else if (input.id.includes('Name')) {
-            label.textContent = 'Full Name';
-        }
-        
-        input.placeholder = ' ';
-        input.parentElement.appendChild(label);
-    });
 
     // Check URL parameters for starting tab state
     const params = new URLSearchParams(window.location.search);

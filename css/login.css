@@ -255,17 +255,31 @@ body.light-theme .showcase-overlay {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.input-group {
-    margin-bottom: 1.25rem;
-}
-
-.input-wrapper {
-    position: relative;
-}
-
-.input-wrapper input {
+/* Form Group & Label Alignment */
+.form-group {
+    margin-bottom: 1.25rem; /* 20px bottom spacing */
+    text-align: left;
     width: 100%;
-    padding: 0.9rem 1rem 0.9rem 3rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px; /* 8px spacing below label */
+    font-size: 15px; /* Consistent desktop label size */
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: left;
+}
+
+.form-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-input-wrapper input {
+    width: 100%;
+    height: 56px; /* 56px premium height */
+    padding: 0 3.25rem 0 3.25rem; /* Symmetric left/right space for icons */
     background: var(--bg-glass-active);
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-md);
@@ -273,9 +287,10 @@ body.light-theme .showcase-overlay {
     font-size: 0.95rem;
     transition: all var(--transition-fast);
     outline: none;
+    box-sizing: border-box;
 }
 
-.input-wrapper input:focus {
+.form-input-wrapper input:focus {
     border-color: var(--primary);
     background: var(--bg-glass);
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
@@ -283,16 +298,18 @@ body.light-theme .showcase-overlay {
 
 .input-icon {
     position: absolute;
-    left: 1rem;
+    left: 18px; /* 18px left spacing */
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
     pointer-events: none;
+    display: flex;
+    align-items: center;
 }
 
 .password-toggle {
     position: absolute;
-    right: 1rem;
+    right: 18px; /* 18px right spacing */
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -307,7 +324,7 @@ body.light-theme .showcase-overlay {
     color: var(--text-primary);
 }
 
-/* Error States */
+/* Error & Success States */
 .error-message {
     font-size: 0.75rem;
     color: var(--error);
@@ -315,16 +332,16 @@ body.light-theme .showcase-overlay {
     display: none;
 }
 
-.input-wrapper.error input {
+.form-group.error input {
     border-color: var(--error);
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
 }
 
-.input-wrapper.error .error-message {
+.form-group.error .error-message {
     display: block;
 }
 
-.input-wrapper.success input {
+.form-group.success input {
     border-color: var(--success);
 }
 

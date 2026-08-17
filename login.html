@@ -77,34 +77,36 @@
                 <div class="form-wrapper">
                     <!-- Login Form -->
                     <form class="form-box active" id="loginForm">
-                        <div class="input-group">
-                            <div class="input-wrapper" id="loginEmailWrapper">
-                                <input type="email" id="loginEmail" required>
+                        <div class="form-group" id="loginEmailWrapper">
+                            <label for="loginEmail">Email Address</label>
+                            <div class="form-input-wrapper">
                                 <span class="input-icon">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                     </svg>
                                 </span>
-                                <span class="error-message">Please enter a valid email address</span>
+                                <input type="email" id="loginEmail" placeholder="Enter your email" required>
                             </div>
+                            <span class="error-message">Please enter a valid email address</span>
                         </div>
 
-                        <div class="input-group">
-                            <div class="input-wrapper" id="loginPasswordWrapper">
-                                <input type="password" id="loginPassword" required>
+                        <div class="form-group" id="loginPasswordWrapper">
+                            <label for="loginPassword">Password</label>
+                            <div class="form-input-wrapper">
                                 <span class="input-icon">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                 </span>
-                                <button type="button" class="password-toggle" data-target="loginPassword">
+                                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                                <button type="button" class="password-toggle" data-target="loginPassword" aria-label="Toggle password visibility">
                                     <svg class="eye-open" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                 </button>
-                                <span class="error-message">Password must be at least 6 characters</span>
                             </div>
+                            <span class="error-message">Password must be at least 6 characters</span>
                         </div>
 
                         <button type="submit" class="submit-btn" style="margin-top: 1rem;">Log In</button>
@@ -116,64 +118,68 @@
 
                     <!-- Register Form -->
                     <form class="form-box" id="registerForm">
-                        <div class="input-group">
-                            <div class="input-wrapper" id="registerNameWrapper">
-                                <input type="text" id="registerName" required>
+                        <div class="form-group" id="registerNameWrapper">
+                            <label for="registerName">Full Name</label>
+                            <div class="form-input-wrapper">
                                 <span class="input-icon">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </span>
-                                <span class="error-message">Please enter your full name</span>
+                                <input type="text" id="registerName" placeholder="Enter your full name" required>
                             </div>
+                            <span class="error-message">Please enter your full name</span>
                         </div>
 
-                        <div class="input-group">
-                            <div class="input-wrapper" id="registerEmailWrapper">
-                                <input type="email" id="registerEmail" required>
+                        <div class="form-group" id="registerEmailWrapper">
+                            <label for="registerEmail">Email Address</label>
+                            <div class="form-input-wrapper">
                                 <span class="input-icon">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                     </svg>
                                 </span>
-                                <span class="error-message">Please enter a valid email address</span>
+                                <input type="email" id="registerEmail" placeholder="Enter your email" required>
                             </div>
+                            <span class="error-message">Please enter a valid email address</span>
                         </div>
 
-                        <div class="input-group">
-                            <div class="input-wrapper" id="registerPasswordWrapper">
-                                <input type="password" id="registerPassword" required>
+                        <div class="form-group" id="registerPasswordWrapper">
+                            <label for="registerPassword">Password</label>
+                            <div class="form-input-wrapper">
                                 <span class="input-icon">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                 </span>
-                                <button type="button" class="password-toggle" data-target="registerPassword">
+                                <input type="password" id="registerPassword" placeholder="Enter password (min. 6 chars)" required>
+                                <button type="button" class="password-toggle" data-target="registerPassword" aria-label="Toggle password visibility">
                                     <svg class="eye-open" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                 </button>
-                                <span class="error-message">Password must be at least 6 characters</span>
                             </div>
+                            <span class="error-message">Password must be at least 6 characters</span>
                         </div>
 
-                        <div class="input-group">
-                            <div class="input-wrapper" id="registerConfirmPasswordWrapper">
-                                <input type="password" id="registerConfirmPassword" required>
+                        <div class="form-group" id="registerConfirmPasswordWrapper">
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <div class="form-input-wrapper">
                                 <span class="input-icon">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
                                 </span>
-                                <button type="button" class="password-toggle" data-target="registerConfirmPassword">
+                                <input type="password" id="registerConfirmPassword" placeholder="Confirm password" required>
+                                <button type="button" class="password-toggle" data-target="registerConfirmPassword" aria-label="Toggle password visibility">
                                     <svg class="eye-open" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                 </button>
-                                <span class="error-message" id="confirmPasswordError">Passwords do not match</span>
                             </div>
+                            <span class="error-message" id="confirmPasswordError">Passwords do not match</span>
                         </div>
 
                         <!-- Registration Benefits checklist -->
