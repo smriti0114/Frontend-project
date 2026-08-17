@@ -5,8 +5,8 @@
 /* Dashboard Layout */
 .dashboard-container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1.5rem 4rem;
+    margin: 0 auto;
+    padding: 120px 1.5rem 4rem; /* Offset for fixed header */
     width: 100%;
 }
 

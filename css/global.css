@@ -253,27 +253,48 @@ body.light-theme .select-field {
 /* Unified Navigation Header */
 header {
     width: 100%;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
+    min-height: 72px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     background: rgba(15, 23, 42, 0.4);
     border-bottom: 1px solid var(--border-glass);
     transition: background-color var(--transition-normal), border var(--transition-normal);
+    display: flex;
+    align-items: center;
 }
 
 body.light-theme header {
     background: rgba(248, 250, 252, 0.4);
 }
 
-nav {
-    max-width: 1200px;
+.navbar {
+    width: 100%;
+}
+
+.navbar-inner {
+    width: min(1400px, calc(100% - 48px));
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    min-height: 72px;
+}
+
+/* Page container wrapper for fixed header offset */
+.page-container {
+    padding-top: 120px; /* Offset for fixed navbar */
+    padding-bottom: 3rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
 }
 
 .logo-container {
