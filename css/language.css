@@ -28,9 +28,9 @@
             color: var(--text);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            padding: 0 1rem 3rem 1rem;
             position: relative;
             overflow-x: hidden;
         }
@@ -87,6 +87,8 @@
             max-width: 1000px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             animation: slideUp 0.8s ease;
+            margin-top: 5rem;
+            margin-bottom: 3rem;
         }
 
         @keyframes slideUp {

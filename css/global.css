@@ -252,6 +252,7 @@ body.light-theme .select-field {
 
 /* Unified Navigation Header */
 header {
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 1000;
