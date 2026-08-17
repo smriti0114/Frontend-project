@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice Generator - Textorr.com</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="voice.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/voice.css">
 </head>
 <body>
     <div class="bg-animation"></div>
+    <header id="header"></header>
 
     <div class="container">
         <div class="header">
@@ -19,6 +20,7 @@
                 Voice Generator
             </h1>
             <p>Transform text into natural speech</p>
+            <span class="usage-counter-badge" style="display: none;"></span>
         </div>
 
         <div class="voice-settings">
@@ -46,6 +48,13 @@
                     <option value="1.5">Very Fast</option>
                 </select>
             </div>
+            <div class="setting-group" style="grid-column: span 2; margin-top: 0.5rem;">
+                <label>Voice Mode</label>
+                <select id="voiceMode">
+                    <option value="premium" selected>Premium Voice (High Quality & Downloadable)</option>
+                    <option value="instant">Instant Voice (Fast - Browser Synthesis)</option>
+                </select>
+            </div>
         </div>
 
         <div class="textarea-wrapper">
@@ -53,6 +62,7 @@
                 id="text-input" 
                 placeholder="Type or paste your text here... (max 5000 characters)"
                 maxlength="5000"
+                aria-label="Text input to convert to speech"
             ></textarea>
             <div class="char-count">
                 <span id="char-count">0</span> / 5000
@@ -104,7 +114,7 @@
             </div>
         </div>
 
-        <a href="home.html" class="back-link">
+        <a href="index.html" class="back-link">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
@@ -115,201 +125,9 @@
     <audio id="audio-player" style="display: none;"></audio>
     <div class="tooltip" id="tooltip"></div>
 
-    <script>
-        // Elements
-        const textInput = document.getElementById('text-input');
-        const charCount = document.getElementById('char-count');
-        const generateBtn = document.getElementById('generateBtn');
-        const audioSection = document.getElementById('audioSection');
-        const audioPlayer = document.getElementById('audio-player');
-        const playBtn = document.getElementById('playBtn');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const visualizer = document.getElementById('visualizer');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationEl = document.getElementById('duration');
-        const tooltip = document.getElementById('tooltip');
-        const languageSelect = document.getElementById('language');
-        const speedSelect = document.getElementById('speed');
-
-        let audioUrl = null;
-        let isPlaying = false;
-
-        // Character counter
-        textInput.addEventListener('input', () => {
-            charCount.textContent = textInput.value.length;
-            textInput.classList.remove('error');
-        });
-
-        // Create visualizer bars
-        function createVisualizer() {
-            visualizer.innerHTML = '';
-            for (let i = 0; i < 40; i++) {
-                const bar = document.createElement('div');
-                bar.className = 'bar';
-                bar.style.height = '20px';
-                visualizer.appendChild(bar);
-            }
-        }
-        createVisualizer();
-
-        // Animate visualizer
-        function animateVisualizer() {
-            const bars = visualizer.querySelectorAll('.bar');
-            bars.forEach((bar, index) => {
-                const height = Math.random() * 80 + 20;
-                bar.style.height = height + 'px';
-                bar.style.animationDelay = (index * 0.05) + 's';
-            });
-        }
-
-        // Generate Speech
-        async function generateSpeech() {
-            const text = textInput.value.trim();
-
-            if (!text) {
-                textInput.classList.add('error');
-                showTooltip('Please enter some text to convert', 'error');
-                return;
-            }
-
-            generateBtn.classList.add('loading');
-
-            try {
-                // Use browser's SpeechSynthesis API for instant playback
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = languageSelect.value;
-                utterance.rate = parseFloat(speedSelect.value);
-                window.speechSynthesis.speak(utterance);
-
-                // Generate downloadable audio using VoiceRSS API
-                const response = await fetch('https://api.voicerss.org/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({
-                        key: 'c22920a7fd514db2bb4c28bc43085d93',
-                        src: text,
-                        hl: languageSelect.value,
-                        r: speedSelect.value === '1' ? '0' : speedSelect.value === '0.75' ? '-5' : '5',
-                        c: 'mp3',
-                        f: '44khz_16bit_stereo',
-                    }),
-                });
-
-                if (!response.ok) throw new Error('Failed to generate audio');
-
-                const audioBlob = await response.blob();
-                audioUrl = URL.createObjectURL(audioBlob);
-                audioPlayer.src = audioUrl;
-
-                audioSection.classList.add('show');
-                generateBtn.classList.remove('loading');
-                showTooltip('Voice generated successfully!', 'success');
-
-            } catch (error) {
-                generateBtn.classList.remove('loading');
-                showTooltip('Failed to generate voice. Please try again.', 'error');
-            }
-        }
-
-        // Play/Pause Controls
-        playBtn.addEventListener('click', () => {
-            audioPlayer.play();
-            isPlaying = true;
-            playBtn.style.display = 'none';
-            pauseBtn.style.display = 'flex';
-            startVisualizerAnimation();
-        });
-
-        pauseBtn.addEventListener('click', () => {
-            audioPlayer.pause();
-            isPlaying = false;
-            pauseBtn.style.display = 'none';
-            playBtn.style.display = 'flex';
-            stopVisualizerAnimation();
-        });
-
-        // Visualizer Animation
-        let visualizerInterval;
-        function startVisualizerAnimation() {
-            visualizerInterval = setInterval(animateVisualizer, 100);
-        }
-
-        function stopVisualizerAnimation() {
-            clearInterval(visualizerInterval);
-            const bars = visualizer.querySelectorAll('.bar');
-            bars.forEach(bar => bar.style.height = '20px');
-        }
-
-        // Audio ended
-        audioPlayer.addEventListener('ended', () => {
-            isPlaying = false;
-            pauseBtn.style.display = 'none';
-            playBtn.style.display = 'flex';
-            stopVisualizerAnimation();
-        });
-
-        // Progress bar
-        audioPlayer.addEventListener('timeupdate', () => {
-            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-            progressFill.style.width = progress + '%';
-            currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-        });
-
-        audioPlayer.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(audioPlayer.duration);
-        });
-
-        progressBar.addEventListener('click', (e) => {
-            const rect = progressBar.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            audioPlayer.currentTime = percent * audioPlayer.duration;
-        });
-
-        // Download
-        downloadBtn.addEventListener('click', () => {
-            if (!audioUrl) {
-                showTooltip('Please generate audio first', 'error');
-                return;
-            }
-            const a = document.createElement('a');
-            a.href = audioUrl;
-            a.download = `voice-${Date.now()}.mp3`;
-            a.click();
-            showTooltip('Audio downloaded!', 'success');
-        });
-
-        // Utility Functions
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        function showTooltip(message, type = 'success') {
-            tooltip.textContent = message;
-            tooltip.style.background = type === 'success' ? '#10b981' : '#ef4444';
-            tooltip.style.left = '50%';
-            tooltip.style.bottom = '30px';
-            tooltip.style.transform = 'translateX(-50%)';
-            tooltip.classList.add('show');
-            setTimeout(() => tooltip.classList.remove('show'), 3000);
-        }
-
-        // Generate button click
-        generateBtn.addEventListener('click', generateSpeech);
-
-        // Enter key support
-        textInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && e.ctrlKey) {
-                generateSpeech();
-            }
-        });
-
-        // Focus input on load
-        window.addEventListener('load', () => textInput.focus());
-    </script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/usage-limit.js"></script>
+    <script src="js/voice-engine.js"></script>
 </body>
 </html>
