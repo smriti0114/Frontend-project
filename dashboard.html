@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Dashboard - Textorr</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header id="header"></header>
+
+    <main class="dashboard-container">
+        <!-- Welcome banner -->
+        <div class="welcome-banner">
+            <div class="welcome-text">
+                <h1 id="welcomeTitle">Welcome, Demo User</h1>
+                <p>Track your conversions, re-run actions, and manage your utilities workspace.</p>
+            </div>
+            <div>
+                <button class="btn btn-secondary" id="clearAllBtn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right:0.25rem;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Clear History
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics Cards Grid -->
+        <div class="stats-grid">
+            <div class="stat-card stat-qr">
+                <div class="stat-icon">📱</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="qrCount">0</span>
+                    <span class="stat-label">QR Generated</span>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-voice">
+                <div class="stat-icon">🎙️</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="voiceCount">0</span>
+                    <span class="stat-label">Voices Synthesized</span>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-translation">
+                <div class="stat-icon">🌐</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="translationCount">0</span>
+                    <span class="stat-label">Translations Made</span>
+                </div>
+            </div>
+
+            <div class="stat-card stat-total">
+                <div class="stat-icon">📈</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Total Activities</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Panel -->
+        <div class="history-section">
+            <div class="history-header">
+                <h2>Recent Activity Log</h2>
+                <span style="font-size:0.85rem; color:var(--text-secondary);" id="activityStats">Showing 0 entries</span>
+            </div>
+
+            <!-- Activity List Container -->
+            <div class="activity-list" id="activityList">
+                <!-- Javascript will render items here -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Textorr.com. All rights reserved.</p>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard-manager.js"></script>
+</body>
+</html>
